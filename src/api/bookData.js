@@ -5,14 +5,14 @@ import firebaseConfig from './apiKeys';
 
 const dbUrl = firebaseConfig.databaseURL;
 
-// TODO: GET BOOKS
+// DONE: GET BOOKS
 const getBooks = () => new Promise((resolve, reject) => {
   axios.get(`${dbUrl}/books.json`)
     .then((response) => resolve(Object.values(response.data)))
     .catch((error) => reject(error));
 });
 
-// TODO: DELETE BOOK
+// DONE: DELETE BOOK
 const deleteBook = (firebaseKey) => new Promise((resolve, reject) => {
   axios.delete(`${dbUrl}/books/${firebaseKey}.json`)
     .then(() => {
@@ -21,7 +21,7 @@ const deleteBook = (firebaseKey) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-// TODO: GET SINGLE BOOK
+// DONE: GET SINGLE BOOK
 const getSingleBook = (firebaseKey) => new Promise((resolve, reject) => {
   axios.get(`${dbUrl}/books/${firebaseKey}.json`)
     .then((response) => resolve(response.data))
@@ -34,7 +34,7 @@ const createBook = () => {};
 // TODO: UPDATE BOOK
 const updateBook = () => {};
 
-// TODO: FILTER BOOKS ON SALE
+// DONE: FILTER BOOKS ON SALE
 const booksOnSale = () => new Promise((resolve, reject) => {
   axios.get(`${dbUrl}/books/.json?orderBy="sale"&equalTo=true`)
     .then((response) => resolve(Object.values(response.data)))
