@@ -28,7 +28,7 @@ const navigationEvents = () => {
     getAuthors().then((authorsArray) => showAuthors(authorsArray));
   });
 
-  // TODO: FAVORITE AUTHORS
+  // DONE: FAVORITE AUTHORS
   document.querySelector('#fav-authors').addEventListener('click', () => {
     favAuthors().then((favAuthorsArray) => showAuthors(favAuthorsArray));
   });
