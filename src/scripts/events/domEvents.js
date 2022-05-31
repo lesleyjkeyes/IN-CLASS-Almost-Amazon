@@ -24,10 +24,8 @@ const domEvents = () => {
     }
 
     // TODO: CLICK EVENT EDITING/UPDATING A BOOK
-    if (e.target.id.includes('edit-book-btn')) {
-      console.warn('EDIT BOOK', e.target.id);
-      console.warn(e.target.id.split('--'));
-    }
+    if (e.target.id.includes('edit-book-btn'));
+
     // DONE: CLICK EVENT FOR VIEW BOOK DETAILS
     if (e.target.id.includes('view-book-btn')) {
       const [, bookFirebaseKey] = e.target.id.split('--');
