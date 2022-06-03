@@ -7,7 +7,13 @@ const dbUrl = firebaseConfig.databaseURL;
 // DONE:  GET ALL AUTHORS
 const getAuthors = (uid) => new Promise((resolve, reject) => {
   axios.get(`${dbUrl}/authors.json?orderBy="uid"&equalTo="${uid}"`)
-    .then((response) => resolve(Object.values(response.data)))
+    .then((response) => {
+      if (response.data) {
+        resolve(Object.values(response.data));
+      } else {
+        resolve([]);
+      }
+    })
     .catch((error) => reject(error));
 });
 
@@ -18,7 +24,7 @@ const createAuthor = (authorObj) => new Promise((resolve, reject) => {
       const payload = { firebaseKey: response.data.name };
       axios.patch(`${dbUrl}/authors/${response.data.name}.json`, payload)
         .then(() => {
-          getAuthors().then(resolve);
+          getAuthors(authorObj.uid).then(resolve);
         });
     }).catch(reject);
 });
@@ -31,10 +37,14 @@ const getSingleAuthor = (firebaseKey) => new Promise((resolve, reject) => {
 });
 
 // DONE: FILTER FAVORITE AUTHORS
-const favAuthors = () => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/authors.json?orderBy="favorite"&equalTo=true`)
-    .then((response) => resolve(Object.values(response.data)))
-    .catch((error) => reject(error));
+const favAuthors = (uid) => new Promise((resolve, reject) => {
+  // axios.get(`${dbUrl}/authors.json?orderBy="favorite"&equalTo=true`)
+  //   .then((response) => resolve(Object.values(response.data)))
+  //   .catch((error) => reject(error));
+  getAuthors(uid).then((authorsArray) => {
+    const starAuthors = authorsArray.filter((author) => author.favorite);
+    resolve(starAuthors);
+  }).catch((error) => reject(error));
 });
 
 // DONE: DELETE AUTHOR
@@ -47,7 +57,11 @@ const deleteSingleAuthor = (firebaseKey) => new Promise((resolve, reject) => {
 });
 
 // FIXME: UPDATE AUTHOR
-const updateAuthor = () => {};
+const updateAuthor = (authorObj) => new Promise((resolve, reject) => {
+  axios.patch(`${dbUrl}/authors/${authorObj.firebaseKey}.json`, authorObj)
+    .then(() => getAuthors(authorObj.uid).then(resolve))
+    .catch(reject);
+});
 
 // DONE: GET A SINGLE AUTHOR'S BOOKS
 const getAuthorBooks = (firebaseKey) => new Promise((resolve, reject) => {
