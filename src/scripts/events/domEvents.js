@@ -1,4 +1,4 @@
-import { getSingleAuthor } from '../../api/authorData';
+import { getSingleAuthor, getAuthors } from '../../api/authorData';
 import { deleteBook, getSingleBook } from '../../api/bookData';
 import { viewBookDetails, viewAuthorDetails, deleteAuthorBooks } from '../../api/mergedData';
 import addAuthorForm from '../components/forms/addAuthorForm';
@@ -8,7 +8,7 @@ import { showBooks } from '../components/pages/books';
 import viewAuthorBooks from '../components/pages/viewAuthorBooks';
 import viewBook from '../components/pages/viewBook';
 
-const domEvents = () => {
+const domEvents = (uid) => {
   document.querySelector('#main-container').addEventListener('click', (e) => {
     // DONE: CLICK EVENT FOR DELETING A BOOK
     if (e.target.id.includes('delete-book')) {
@@ -21,7 +21,7 @@ const domEvents = () => {
 
     // DONE: CLICK EVENT FOR SHOWING FORM FOR ADDING A BOOK
     if (e.target.id.includes('add-book-btn')) {
-      addBookForm();
+      addBookForm(uid);
     }
 
     // DONE: CLICK EVENT EDITING/UPDATING A BOOK
@@ -41,8 +41,9 @@ const domEvents = () => {
       // eslint-disable-next-line no-alert
       if (window.confirm('Want to delete?')) {
         const [, firebaseKey] = e.target.id.split('--');
-        // deleteSingleAuthor(firebaseKey).then((authorsArray) => showAuthors(authorsArray));
-        deleteAuthorBooks(firebaseKey).then((showAuthors));
+        // deleteAuthorBooks(firebaseKey).then((authorsArray) => showAuthors(authorsArray));
+        deleteAuthorBooks(firebaseKey);
+        getAuthors(uid).then((authors) => showAuthors(authors));
       }
     }
 
@@ -56,10 +57,10 @@ const domEvents = () => {
     if (e.target.id.includes('add-author-btn')) {
       addAuthorForm();
     }
-    // FIXME: ADD CLICK EVENT FOR EDITING AN AUTHOR
-    if (e.target.id.includes('edit-author-btn')) {
+    // DONE: ADD CLICK EVENT FOR EDITING AN AUTHOR
+    if (e.target.id.includes('update-author')) {
       const [, authorFirebaseKey] = e.target.id.split('--');
-      getSingleAuthor(authorFirebaseKey).then((authorObject) => addAuthorForm(authorObject.uid, authorObject));
+      getSingleAuthor(authorFirebaseKey).then((authorObject) => addAuthorForm(authorObject));
     }
   });
 };

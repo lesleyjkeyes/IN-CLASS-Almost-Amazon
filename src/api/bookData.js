@@ -41,7 +41,7 @@ const createBook = (bookObj) => new Promise((resolve, reject) => {
       const payload = { firebaseKey: response.data.name };
       axios.patch(`${dbUrl}/books/${response.data.name}.json`, payload)
         .then(() => {
-          getBooks().then(resolve);
+          getBooks(bookObj.uid).then(resolve);
         });
     }).catch(reject);
 });
@@ -54,10 +54,14 @@ const updateBook = (bookObj) => new Promise((resolve, reject) => {
 });
 
 // DONE: FILTER BOOKS ON SALE
-const booksOnSale = () => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/books/.json?orderBy="sale"&equalTo=true`)
-    .then((response) => resolve(Object.values(response.data)))
-    .catch((error) => reject(error));
+const booksOnSale = (uid) => new Promise((resolve, reject) => {
+  // axios.get(`${dbUrl}/books/.json?orderBy="uid"&equalTo="${uid}"&orderBy="sale"&equalTo=true`)
+  //   .then((response) => resolve(Object.values(response.data)))
+  //   .catch((error) => reject(error)); - this was code for getting sale books without uid
+  getBooks(uid).then((booksArray) => {
+    const saleBooks = booksArray.filter((book) => book.sale);
+    resolve(saleBooks);
+  }).catch((error) => reject(error));
 });
 
 // TODO: STRETCH...SEARCH BOOKS
